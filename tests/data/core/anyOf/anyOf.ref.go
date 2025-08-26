@@ -7,7 +7,7 @@ type Agreement struct {
 	Id *string `json:"id,omitempty" yaml:"id,omitempty" mapstructure:"id,omitempty"`
 }
 
-type AnyOfRef map[string]interface{}
+type AnyOfRef interface{}
 
 type Offer struct {
 	// Name corresponds to the JSON schema field "name".
