@@ -11,11 +11,12 @@ import (
 )
 
 type output struct {
-	minimalNames  bool
-	file          *codegen.File
-	declsByName   map[string]*codegen.TypeDecl
-	declsBySchema map[*schemas.Type]*codegen.TypeDecl
-	warner        func(string)
+	minimalNames     bool
+	file             *codegen.File
+	declsByName      map[string]*codegen.TypeDecl
+	declsBySchema    map[*schemas.Type]*codegen.TypeDecl
+	processedSchemas map[string]bool
+	warner           func(string)
 }
 
 func (o *output) getDeclByEqualSchema(name string, t *schemas.Type) *codegen.TypeDecl {
