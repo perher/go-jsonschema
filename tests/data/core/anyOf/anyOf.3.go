@@ -138,13 +138,13 @@ func (j *AnyOf3) UnmarshalJSON(value []byte) error {
 	var anyOf3_1 AnyOf3_1
 	var anyOf3_2 AnyOf3_2
 	var errs []error
-	if err := anyOf3_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf3_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf3_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf3_1); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf3_2.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf3_2); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 3 {
@@ -169,13 +169,13 @@ func (j *AnyOf3) UnmarshalYAML(value *yaml.Node) error {
 	var anyOf3_1 AnyOf3_1
 	var anyOf3_2 AnyOf3_2
 	var errs []error
-	if err := anyOf3_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf3_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf3_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf3_1); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf3_2.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf3_2); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 3 {

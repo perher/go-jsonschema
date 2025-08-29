@@ -104,13 +104,13 @@ func (j *AnyOf2ConfigurationsElem) UnmarshalJSON(value []byte) error {
 	var anyOf2ConfigurationsElem_1 AnyOf2ConfigurationsElem_1
 	var anyOf2ConfigurationsElem_2 AnyOf2ConfigurationsElem_2
 	var errs []error
-	if err := anyOf2ConfigurationsElem_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf2ConfigurationsElem_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf2ConfigurationsElem_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf2ConfigurationsElem_1); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf2ConfigurationsElem_2.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf2ConfigurationsElem_2); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 3 {
@@ -135,13 +135,13 @@ func (j *AnyOf2ConfigurationsElem) UnmarshalYAML(value *yaml.Node) error {
 	var anyOf2ConfigurationsElem_1 AnyOf2ConfigurationsElem_1
 	var anyOf2ConfigurationsElem_2 AnyOf2ConfigurationsElem_2
 	var errs []error
-	if err := anyOf2ConfigurationsElem_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf2ConfigurationsElem_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf2ConfigurationsElem_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf2ConfigurationsElem_1); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf2ConfigurationsElem_2.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf2ConfigurationsElem_2); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 3 {

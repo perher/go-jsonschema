@@ -71,7 +71,7 @@ func (j *ComposedWithAllOfAndProperties) UnmarshalJSON(value []byte) error {
 	}
 	var composedWithAllOfAndProperties_0 ComposedWithAllOfAndProperties_0
 	var errs []error
-	if err := composedWithAllOfAndProperties_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &composedWithAllOfAndProperties_0); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 1 {
@@ -102,7 +102,7 @@ func (j *ComposedWithAllOfAndProperties) UnmarshalYAML(value *yaml.Node) error {
 	}
 	var composedWithAllOfAndProperties_0 ComposedWithAllOfAndProperties_0
 	var errs []error
-	if err := composedWithAllOfAndProperties_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&composedWithAllOfAndProperties_0); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 1 {

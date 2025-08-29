@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	formatYAML  = "yaml"
-	YAMLPackage = "gopkg.in/yaml.v3"
+	formatYAML            = "yaml"
+	unmarshalTemplateYAML = "value.Decode(&%s)"
+	YAMLPackage           = "gopkg.in/yaml.v3"
 )
 
 type yamlFormatter struct{}
@@ -48,7 +49,7 @@ func (yf *yamlFormatter) generate(
 		}
 
 		for _, v := range beforeValidators {
-			if err := v.generate(out, "yaml"); err != nil {
+			if err := v.generate(out, unmarshalTemplateYAML); err != nil {
 				return fmt.Errorf("cannot generate before validators: %w", err)
 			}
 		}
@@ -66,7 +67,7 @@ func (yf *yamlFormatter) generate(
 		out.Printlnf("if err := value.Decode(&%s); err != nil { return err }", varNamePlainStruct)
 
 		for _, v := range afterValidators {
-			if err := v.generate(out, "yaml"); err != nil {
+			if err := v.generate(out, unmarshalTemplateYAML); err != nil {
 				return fmt.Errorf("cannot generate after validators: %w", err)
 			}
 		}

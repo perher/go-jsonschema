@@ -336,10 +336,10 @@ func (j *ObjectPropertiesDefaultPlannersElem) UnmarshalJSON(value []byte) error 
 	var objectPropertiesDefaultPlannersElem_0 ObjectPropertiesDefaultPlannersElem_0
 	var objectPropertiesDefaultPlannersElem_1 ObjectPropertiesDefaultPlannersElem_1
 	var errs []error
-	if err := objectPropertiesDefaultPlannersElem_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &objectPropertiesDefaultPlannersElem_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := objectPropertiesDefaultPlannersElem_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &objectPropertiesDefaultPlannersElem_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {
@@ -363,10 +363,10 @@ func (j *ObjectPropertiesDefaultPlannersElem) UnmarshalYAML(value *yaml.Node) er
 	var objectPropertiesDefaultPlannersElem_0 ObjectPropertiesDefaultPlannersElem_0
 	var objectPropertiesDefaultPlannersElem_1 ObjectPropertiesDefaultPlannersElem_1
 	var errs []error
-	if err := objectPropertiesDefaultPlannersElem_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&objectPropertiesDefaultPlannersElem_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := objectPropertiesDefaultPlannersElem_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&objectPropertiesDefaultPlannersElem_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {

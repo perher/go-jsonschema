@@ -14,7 +14,7 @@ import (
 )
 
 type validator interface {
-	generate(out *codegen.Emitter, format string) error
+	generate(out *codegen.Emitter, unmarshalTemplate string) error
 	desc() *validatorDesc
 }
 
@@ -47,7 +47,7 @@ type requiredValidator struct {
 	declName string
 }
 
-func (v *requiredValidator) generate(out *codegen.Emitter, format string) error {
+func (v *requiredValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	// The container itself may be null (if the type is ["null", "object"]), in which case
 	// the map will be nil and none of the properties are present. This shouldn't fail
 	// the validation, though, as that's allowed as long as the container is allowed to be null.
@@ -72,7 +72,7 @@ type readOnlyValidator struct {
 	declName string
 }
 
-func (v *readOnlyValidator) generate(out *codegen.Emitter, format string) error {
+func (v *readOnlyValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	// The container itself may be null (if the type is ["null", "object"]), in which case
 	// the map will be nil and none of the properties are present. This shouldn't fail
 	// the validation, though, as that's allowed as long as the container is allowed to be null.
@@ -98,7 +98,7 @@ type nullTypeValidator struct {
 	arrayDepth int
 }
 
-func (v *nullTypeValidator) generate(out *codegen.Emitter, format string) error {
+func (v *nullTypeValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	value := getPlainName(v.fieldName)
 	fieldName := v.jsonName
 
@@ -148,7 +148,7 @@ type defaultValidator struct {
 	defaultValue     interface{}
 }
 
-func (v *defaultValidator) generate(out *codegen.Emitter, format string) error {
+func (v *defaultValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	defaultValue, err := v.dumpDefaultValueAssignment(out)
 	if err != nil {
 		return fmt.Errorf("cannot generate default validator: %w", err)
@@ -285,7 +285,7 @@ type arrayValidator struct {
 	maxItems   int
 }
 
-func (v *arrayValidator) generate(out *codegen.Emitter, format string) error {
+func (v *arrayValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	if v.minItems == 0 && v.maxItems == 0 {
 		return nil
 	}
@@ -350,7 +350,7 @@ type stringValidator struct {
 	pattern    string
 }
 
-func (v *stringValidator) generate(out *codegen.Emitter, format string) error {
+func (v *stringValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	value := getPlainName(v.fieldName)
 	fieldName := v.jsonName
 	checkPointer := ""
@@ -427,7 +427,7 @@ type numericValidator struct {
 	roundToInt       bool
 }
 
-func (v *numericValidator) generate(out *codegen.Emitter, format string) error {
+func (v *numericValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	value := getPlainName(v.fieldName)
 	checkPointer := ""
 	pointerPrefix := ""
@@ -532,7 +532,7 @@ type anyOfValidator struct {
 	elemCount int
 }
 
-func (v *anyOfValidator) generate(out *codegen.Emitter, format string) error {
+func (v *anyOfValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
 	for i := range v.elemCount {
 		out.Printlnf(`var %s_%d %s_%d`, lowerFirst(v.fieldName), i, upperFirst(v.fieldName), i)
 	}
@@ -541,10 +541,8 @@ func (v *anyOfValidator) generate(out *codegen.Emitter, format string) error {
 
 	for i := range v.elemCount {
 		out.Printlnf(
-			`if err := %s_%d.Unmarshal%s(value); err != nil {`,
-			lowerFirst(v.fieldName),
-			i,
-			strings.ToUpper(format),
+			`if err := %s; err != nil {`,
+			fmt.Sprintf(unmarshalTemplate, fmt.Sprintf("%s_%d", lowerFirst(v.fieldName), i)),
 		)
 		out.Indent(1)
 		out.Printlnf(`errs = append(errs, err)`)

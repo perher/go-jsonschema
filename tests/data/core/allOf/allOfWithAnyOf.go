@@ -75,10 +75,10 @@ func (j *Agreement) UnmarshalJSON(value []byte) error {
 	var agreement_0 Agreement_0
 	var agreement_1 Agreement_1
 	var errs []error
-	if err := agreement_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &agreement_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := agreement_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &agreement_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {
@@ -102,10 +102,10 @@ func (j *Agreement) UnmarshalYAML(value *yaml.Node) error {
 	var agreement_0 Agreement_0
 	var agreement_1 Agreement_1
 	var errs []error
-	if err := agreement_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&agreement_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := agreement_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&agreement_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {

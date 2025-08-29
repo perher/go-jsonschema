@@ -118,10 +118,10 @@ func (j *ComposedWithMultipleRequired) UnmarshalJSON(value []byte) error {
 	var composedWithMultipleRequired_0 ComposedWithMultipleRequired_0
 	var composedWithMultipleRequired_1 ComposedWithMultipleRequired_1
 	var errs []error
-	if err := composedWithMultipleRequired_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &composedWithMultipleRequired_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := composedWithMultipleRequired_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &composedWithMultipleRequired_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {
@@ -153,10 +153,10 @@ func (j *ComposedWithMultipleRequired) UnmarshalYAML(value *yaml.Node) error {
 	var composedWithMultipleRequired_0 ComposedWithMultipleRequired_0
 	var composedWithMultipleRequired_1 ComposedWithMultipleRequired_1
 	var errs []error
-	if err := composedWithMultipleRequired_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&composedWithMultipleRequired_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := composedWithMultipleRequired_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&composedWithMultipleRequired_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {

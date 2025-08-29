@@ -78,10 +78,10 @@ func (j *AnyOf7) UnmarshalJSON(value []byte) error {
 	var anyOf7_0 AnyOf7_0
 	var anyOf7_1 AnyOf7_1
 	var errs []error
-	if err := anyOf7_0.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf7_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf7_1.UnmarshalJSON(value); err != nil {
+	if err := json.Unmarshal(value, &anyOf7_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {
@@ -105,10 +105,10 @@ func (j *AnyOf7) UnmarshalYAML(value *yaml.Node) error {
 	var anyOf7_0 AnyOf7_0
 	var anyOf7_1 AnyOf7_1
 	var errs []error
-	if err := anyOf7_0.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf7_0); err != nil {
 		errs = append(errs, err)
 	}
-	if err := anyOf7_1.UnmarshalYAML(value); err != nil {
+	if err := value.Decode(&anyOf7_1); err != nil {
 		errs = append(errs, err)
 	}
 	if len(errs) == 2 {

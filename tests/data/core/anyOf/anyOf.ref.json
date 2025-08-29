@@ -10,7 +10,8 @@
   ],
   "definitions": {
     "Policy": {
-      "oneOf": [
+      "type": "object",
+      "anyOf": [
         {
           "$ref": "#/definitions/Offer"
         },
@@ -25,7 +26,10 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "name"
+      ]
     },
     "Agreement": {
       "type": "object",

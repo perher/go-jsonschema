@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	formatJSON = "json"
+	formatJSON            = "json"
+	unmarshalTemplateJSON = formatJSON + ".Unmarshal(value, &%s)"
 )
 
 var ErrCannotUnmarshalEnum = fmt.Errorf("cannot unmarshal enum")
@@ -49,7 +50,7 @@ func (jf *jsonFormatter) generate(
 		}
 
 		for _, v := range beforeValidators {
-			if err := v.generate(out, "json"); err != nil {
+			if err := v.generate(out, unmarshalTemplateJSON); err != nil {
 				return fmt.Errorf("cannot generate before validators: %w", err)
 			}
 		}
@@ -68,7 +69,7 @@ func (jf *jsonFormatter) generate(
 			formatJSON, varNamePlainStruct)
 
 		for _, v := range afterValidators {
-			if err := v.generate(out, "json"); err != nil {
+			if err := v.generate(out, unmarshalTemplateJSON); err != nil {
 				return fmt.Errorf("cannot generate after validators: %w", err)
 			}
 		}

@@ -2,6 +2,11 @@
 
 package test
 
+import "encoding/json"
+import "errors"
+import "fmt"
+import yaml "gopkg.in/yaml.v3"
+
 type Agreement struct {
 	// Id corresponds to the JSON schema field "id".
 	Id *string `json:"id,omitempty" yaml:"id,omitempty" mapstructure:"id,omitempty"`
@@ -9,11 +14,163 @@ type Agreement struct {
 
 type Offer struct {
 	// Name corresponds to the JSON schema field "name".
+	Name string `json:"name" yaml:"name" mapstructure:"name"`
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *Offer) UnmarshalJSON(value []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(value, &raw); err != nil {
+		return err
+	}
+	if _, ok := raw["name"]; raw != nil && !ok {
+		return fmt.Errorf("field name in Offer: required")
+	}
+	type Plain Offer
+	var plain Plain
+	if err := json.Unmarshal(value, &plain); err != nil {
+		return err
+	}
+	*j = Offer(plain)
+	return nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler.
+func (j *Offer) UnmarshalYAML(value *yaml.Node) error {
+	var raw map[string]interface{}
+	if err := value.Decode(&raw); err != nil {
+		return err
+	}
+	if _, ok := raw["name"]; raw != nil && !ok {
+		return fmt.Errorf("field name in Offer: required")
+	}
+	type Plain Offer
+	var plain Plain
+	if err := value.Decode(&plain); err != nil {
+		return err
+	}
+	*j = Offer(plain)
+	return nil
+}
+
+type Policy_0 = Offer
+
+type Policy_1 = Agreement
+
+type Policy struct {
+	// Id corresponds to the JSON schema field "id".
+	Id *string `json:"id,omitempty" yaml:"id,omitempty" mapstructure:"id,omitempty"`
+
+	// Name corresponds to the JSON schema field "name".
 	Name *string `json:"name,omitempty" yaml:"name,omitempty" mapstructure:"name,omitempty"`
 }
 
-type Policy interface{}
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *Policy) UnmarshalJSON(value []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(value, &raw); err != nil {
+		return err
+	}
+	var policy_0 Policy_0
+	var policy_1 Policy_1
+	var errs []error
+	if err := json.Unmarshal(value, &policy_0); err != nil {
+		errs = append(errs, err)
+	}
+	if err := json.Unmarshal(value, &policy_1); err != nil {
+		errs = append(errs, err)
+	}
+	if len(errs) == 2 {
+		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	type Plain Policy
+	var plain Plain
+	if err := json.Unmarshal(value, &plain); err != nil {
+		return err
+	}
+	*j = Policy(plain)
+	return nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler.
+func (j *Policy) UnmarshalYAML(value *yaml.Node) error {
+	var raw map[string]interface{}
+	if err := value.Decode(&raw); err != nil {
+		return err
+	}
+	var policy_0 Policy_0
+	var policy_1 Policy_1
+	var errs []error
+	if err := value.Decode(&policy_0); err != nil {
+		errs = append(errs, err)
+	}
+	if err := value.Decode(&policy_1); err != nil {
+		errs = append(errs, err)
+	}
+	if len(errs) == 2 {
+		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	type Plain Policy
+	var plain Plain
+	if err := value.Decode(&plain); err != nil {
+		return err
+	}
+	*j = Policy(plain)
+	return nil
+}
 
 type AnyOfRef_0 = Policy
 
-type AnyOfRef map[string]interface{}
+type AnyOfRef struct {
+	// Id corresponds to the JSON schema field "id".
+	Id *string `json:"id,omitempty" yaml:"id,omitempty" mapstructure:"id,omitempty"`
+
+	// Name corresponds to the JSON schema field "name".
+	Name *string `json:"name,omitempty" yaml:"name,omitempty" mapstructure:"name,omitempty"`
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *AnyOfRef) UnmarshalJSON(value []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(value, &raw); err != nil {
+		return err
+	}
+	var anyOfRef_0 AnyOfRef_0
+	var errs []error
+	if err := json.Unmarshal(value, &anyOfRef_0); err != nil {
+		errs = append(errs, err)
+	}
+	if len(errs) == 1 {
+		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	type Plain AnyOfRef
+	var plain Plain
+	if err := json.Unmarshal(value, &plain); err != nil {
+		return err
+	}
+	*j = AnyOfRef(plain)
+	return nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler.
+func (j *AnyOfRef) UnmarshalYAML(value *yaml.Node) error {
+	var raw map[string]interface{}
+	if err := value.Decode(&raw); err != nil {
+		return err
+	}
+	var anyOfRef_0 AnyOfRef_0
+	var errs []error
+	if err := value.Decode(&anyOfRef_0); err != nil {
+		errs = append(errs, err)
+	}
+	if len(errs) == 1 {
+		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	type Plain AnyOfRef
+	var plain Plain
+	if err := value.Decode(&plain); err != nil {
+		return err
+	}
+	*j = AnyOfRef(plain)
+	return nil
+}
