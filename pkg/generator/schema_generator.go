@@ -314,7 +314,7 @@ func (g *schemaGenerator) generateDeclaredType(t *schemas.Type, scope nameScope)
 	switch tt := theType.(type) {
 	case *codegen.StructType:
 		if t.GetSubSchemaType() == schemas.SubSchemaTypeAnyOf {
-			validators = append(validators, &anyOfValidator{decl.Name, t.GetSubSchemasCount()})
+			validators = append(validators, &anyOfValidator{decl.Name, t.GetSubSchemasValidators()})
 			g.generateUnmarshaler(decl, validators)
 
 			return &codegen.NamedType{Decl: &decl}, nil
@@ -853,6 +853,8 @@ func (g *schemaGenerator) generateAnyOfType(t *schemas.Type, scope nameScope) (c
 
 	var isCycle bool
 
+	validators := []int{}
+
 	for i, typ := range rAnyOf {
 		// infer type from base if not set
 		if len(typ.Type) == 0 {
@@ -874,8 +876,13 @@ func (g *schemaGenerator) generateAnyOfType(t *schemas.Type, scope nameScope) (c
 			continue
 		}
 
-		if _, err := g.generateTypeInline(typ, scope.add(fmt.Sprintf("_%d", i))); err != nil {
+		subType, err := g.generateTypeInline(typ, scope.add(fmt.Sprintf("_%d", i)))
+		if err != nil {
 			return nil, err
+		}
+
+		if subType != nil {
+			validators = append(validators, i)
 		}
 	}
 
@@ -888,6 +895,7 @@ func (g *schemaGenerator) generateAnyOfType(t *schemas.Type, scope nameScope) (c
 		return nil, fmt.Errorf("could not merge anyOf types: %w", err)
 	}
 
+	anyOfType.SetSubSchemasValidators(validators)
 	anyOfType.AnyOf = nil
 
 	return g.generateTypeInline(anyOfType, scope)

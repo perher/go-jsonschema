@@ -200,9 +200,9 @@ type Type struct {
 	GoJSONSchemaExtension *GoJSONSchemaExtension `json:"goJSONSchema,omitempty"` //nolint:tagliatelle // breaking change
 
 	// SubSchemaType marks the type as being a subschema type.
-	subSchemaType     SubSchemaType `json:"-"`
-	subSchemasCount   int           `json:"-"`
-	subSchemaTypeElem bool          `json:"-"`
+	subSchemaType        SubSchemaType `json:"-"`
+	subSchemasValidators []int         `json:"-"`
+	subSchemaTypeElem    bool          `json:"-"`
 
 	// Flags.
 	Dereferenced bool `json:"-"` // Marks that his type has been dereferenced.
@@ -216,12 +216,12 @@ func (value *Type) GetSubSchemaType() SubSchemaType {
 	return value.subSchemaType
 }
 
-func (value *Type) SetSubSchemasCount(ssc int) {
-	value.subSchemasCount = ssc
+func (value *Type) SetSubSchemasValidators(validators []int) {
+	value.subSchemasValidators = validators
 }
 
-func (value *Type) GetSubSchemasCount() int {
-	return value.subSchemasCount
+func (value *Type) GetSubSchemasValidators() []int {
+	return value.subSchemasValidators
 }
 
 func (value *Type) IsSubSchemaTypeElem() bool {
@@ -303,7 +303,6 @@ func AnyOf(types []*Type, baseType *Type) (*Type, error) {
 
 	typ.Required = mergeRequiredUnion(types, baseType)
 	typ.subSchemaType = SubSchemaTypeAnyOf
-	typ.subSchemasCount = len(types)
 
 	return typ, nil
 }

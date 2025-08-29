@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "expected_peer_name": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PeerName"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "$defs": {
+    "PeerName": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "The peer's name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  }
+}

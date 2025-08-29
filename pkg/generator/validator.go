@@ -528,18 +528,18 @@ func getPlainName(fieldName string) string {
 }
 
 type anyOfValidator struct {
-	fieldName string
-	elemCount int
+	fieldName   string
+	elemIndices []int
 }
 
 func (v *anyOfValidator) generate(out *codegen.Emitter, unmarshalTemplate string) error {
-	for i := range v.elemCount {
+	for _, i := range v.elemIndices {
 		out.Printlnf(`var %s_%d %s_%d`, lowerFirst(v.fieldName), i, upperFirst(v.fieldName), i)
 	}
 
 	out.Printlnf(`var errs []error`)
 
-	for i := range v.elemCount {
+	for _, i := range v.elemIndices {
 		out.Printlnf(
 			`if err := %s; err != nil {`,
 			fmt.Sprintf(unmarshalTemplate, fmt.Sprintf("%s_%d", lowerFirst(v.fieldName), i)),
@@ -550,7 +550,7 @@ func (v *anyOfValidator) generate(out *codegen.Emitter, unmarshalTemplate string
 		out.Printlnf(`}`)
 	}
 
-	out.Printlnf("if len(errs) == %d {", v.elemCount)
+	out.Printlnf("if len(errs) == %d {", len(v.elemIndices))
 	out.Indent(1)
 	out.Printlnf(`return fmt.Errorf("all validators failed: %%s", errors.Join(errs...))`)
 	out.Indent(-1)
