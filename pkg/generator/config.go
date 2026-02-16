@@ -40,6 +40,8 @@ type Config struct {
 	// When DisableOmitZero is set to false,
 	// an "omitzero" tag will be present for all fields that are not required.
 	DisableOmitZero bool
+	// SkipOptionalPointer will skip generating optional properties using pointers for primitive types
+	SkipOptionalPointer bool
 	// DisableReadOnlyValidation configures the generator to omit validation for read-only fields.
 	DisableReadOnlyValidation bool
 	// DisableCustomTypesForMaps configures the generator to avoid creating a custom type for maps,

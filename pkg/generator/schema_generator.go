@@ -979,6 +979,10 @@ func (g *schemaGenerator) generateStructFieldType(
 		return fieldType, nil
 	}
 
+	if g.config.SkipOptionalPointer && len(schemaType.Type) >= 0 && schemas.IsPrimitiveType(schemaType.Type[0]) {
+		return fieldType, nil
+	}
+
 	if !isRequired && schemaType.Default == nil {
 		return codegen.WrapTypeInPointer(fieldType), nil
 	}
