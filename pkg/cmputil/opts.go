@@ -16,7 +16,7 @@ func Opts(t ...any) []cmp.Option {
 	opts := make([]cmp.Option, 0, 3*n)
 
 	for _, v := range t {
-		opts = append(opts, cmpopts.IgnoreUnexported(v), cmpopts.IgnoreFields(v, "Ref"), cmpopts.IgnoreFields(v, "AnyOf"))
+		opts = append(opts, cmpopts.IgnoreUnexported(v), cmpopts.IgnoreFields(v, "Ref"), cmpopts.IgnoreFields(v, "AnyOf"), cmpopts.IgnoreFields(v, "Dereferenced"))
 	}
 
 	return opts
