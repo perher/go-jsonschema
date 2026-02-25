@@ -329,9 +329,6 @@ func (g *schemaGenerator) generateDeclaredType(t *schemas.Type, scope nameScope)
 	case *codegen.StructType:
 		if t.GetSubSchemaType() == schemas.SubSchemaTypeAnyOf {
 			validators = append(validators, &anyOfValidator{decl.Name, t.GetSubSchemasCount()})
-			g.generateUnmarshaler(&decl, validators)
-
-			return &codegen.NamedType{Decl: &decl}, nil
 		}
 
 		for _, f := range tt.RequiredJSONFields {

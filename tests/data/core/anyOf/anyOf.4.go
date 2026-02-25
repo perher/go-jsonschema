@@ -51,10 +51,16 @@ func (j *AnyOf4Elem) UnmarshalYAML(value *yaml.Node) error {
 	if len(errs) == 3 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["linkType"]; raw != nil && !ok {
+		return fmt.Errorf("field linkType in AnyOf4Elem: required")
+	}
 	type Plain AnyOf4Elem
 	var plain Plain
 	if err := value.Decode(&plain); err != nil {
 		return err
+	}
+	if plain.LinkKind != nil && utf8.RuneCountInString(string(*plain.LinkKind)) < 1 {
+		return fmt.Errorf("field %s length: must be >= %d", "linkKind", 1)
 	}
 	*j = AnyOf4Elem(plain)
 	return nil
@@ -82,10 +88,16 @@ func (j *AnyOf4Elem) UnmarshalJSON(value []byte) error {
 	if len(errs) == 3 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["linkType"]; raw != nil && !ok {
+		return fmt.Errorf("field linkType in AnyOf4Elem: required")
+	}
 	type Plain AnyOf4Elem
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
+	}
+	if plain.LinkKind != nil && utf8.RuneCountInString(string(*plain.LinkKind)) < 1 {
+		return fmt.Errorf("field %s length: must be >= %d", "linkKind", 1)
 	}
 	*j = AnyOf4Elem(plain)
 	return nil

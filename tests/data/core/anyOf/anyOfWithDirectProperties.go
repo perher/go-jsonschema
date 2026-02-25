@@ -77,6 +77,9 @@ func (j *ComposedWithAllOfAndProperties) UnmarshalJSON(value []byte) error {
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["BaseField"]; raw != nil && !ok {
+		return fmt.Errorf("field BaseField in ComposedWithAllOfAndProperties: required")
+	}
 	type Plain ComposedWithAllOfAndProperties
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
@@ -107,6 +110,9 @@ func (j *ComposedWithAllOfAndProperties) UnmarshalYAML(value *yaml.Node) error {
 	}
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	if _, ok := raw["BaseField"]; raw != nil && !ok {
+		return fmt.Errorf("field BaseField in ComposedWithAllOfAndProperties: required")
 	}
 	type Plain ComposedWithAllOfAndProperties
 	var plain Plain

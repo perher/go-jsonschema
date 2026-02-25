@@ -84,10 +84,16 @@ func (j *Agreement) UnmarshalJSON(value []byte) error {
 	if len(errs) == 2 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["@type"]; raw != nil && !ok {
+		return fmt.Errorf("field @type in Agreement: required")
+	}
 	type Plain Agreement
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
 		return err
+	}
+	if plain.Type != "Agreement" {
+		return fmt.Errorf("field %s: must be equal to %s", "@type", "Agreement")
 	}
 	*j = Agreement(plain)
 	return nil
@@ -111,10 +117,16 @@ func (j *Agreement) UnmarshalYAML(value *yaml.Node) error {
 	if len(errs) == 2 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["@type"]; raw != nil && !ok {
+		return fmt.Errorf("field @type in Agreement: required")
+	}
 	type Plain Agreement
 	var plain Plain
 	if err := value.Decode(&plain); err != nil {
 		return err
+	}
+	if plain.Type != "Agreement" {
+		return fmt.Errorf("field %s: must be equal to %s", "@type", "Agreement")
 	}
 	*j = Agreement(plain)
 	return nil

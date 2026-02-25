@@ -127,6 +127,9 @@ func (j *ComposedWithMultipleRequired) UnmarshalJSON(value []byte) error {
 	if len(errs) == 2 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["directField"]; raw != nil && !ok {
+		return fmt.Errorf("field directField in ComposedWithMultipleRequired: required")
+	}
 	type Plain ComposedWithMultipleRequired
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
@@ -161,6 +164,9 @@ func (j *ComposedWithMultipleRequired) UnmarshalYAML(value *yaml.Node) error {
 	}
 	if len(errs) == 2 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	if _, ok := raw["directField"]; raw != nil && !ok {
+		return fmt.Errorf("field directField in ComposedWithMultipleRequired: required")
 	}
 	type Plain ComposedWithMultipleRequired
 	var plain Plain

@@ -147,6 +147,12 @@ func (j *TestcaseExpectedPeerName) UnmarshalYAML(value *yaml.Node) error {
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["kind"]; raw != nil && !ok {
+		return fmt.Errorf("field kind in TestcaseExpectedPeerName: required")
+	}
+	if _, ok := raw["value"]; raw != nil && !ok {
+		return fmt.Errorf("field value in TestcaseExpectedPeerName: required")
+	}
 	type Plain TestcaseExpectedPeerName
 	var plain Plain
 	if err := value.Decode(&plain); err != nil {
@@ -169,6 +175,12 @@ func (j *TestcaseExpectedPeerName) UnmarshalJSON(value []byte) error {
 	}
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	if _, ok := raw["kind"]; raw != nil && !ok {
+		return fmt.Errorf("field kind in TestcaseExpectedPeerName: required")
+	}
+	if _, ok := raw["value"]; raw != nil && !ok {
+		return fmt.Errorf("field value in TestcaseExpectedPeerName: required")
 	}
 	type Plain TestcaseExpectedPeerName
 	var plain Plain
@@ -202,6 +214,12 @@ func (j *TestcaseNotExpectedPeerName) UnmarshalJSON(value []byte) error {
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
 	}
+	if _, ok := raw["kind"]; raw != nil && !ok {
+		return fmt.Errorf("field kind in TestcaseNotExpectedPeerName: required")
+	}
+	if _, ok := raw["value"]; raw != nil && !ok {
+		return fmt.Errorf("field value in TestcaseNotExpectedPeerName: required")
+	}
 	type Plain TestcaseNotExpectedPeerName
 	var plain Plain
 	if err := json.Unmarshal(value, &plain); err != nil {
@@ -224,6 +242,12 @@ func (j *TestcaseNotExpectedPeerName) UnmarshalYAML(value *yaml.Node) error {
 	}
 	if len(errs) == 1 {
 		return fmt.Errorf("all validators failed: %s", errors.Join(errs...))
+	}
+	if _, ok := raw["kind"]; raw != nil && !ok {
+		return fmt.Errorf("field kind in TestcaseNotExpectedPeerName: required")
+	}
+	if _, ok := raw["value"]; raw != nil && !ok {
+		return fmt.Errorf("field value in TestcaseNotExpectedPeerName: required")
 	}
 	type Plain TestcaseNotExpectedPeerName
 	var plain Plain
