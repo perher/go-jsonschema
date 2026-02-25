@@ -568,6 +568,41 @@ func (g *schemaGenerator) generateUnmarshaler(decl *codegen.TypeDecl, validators
 			Name: decl.GetName() + "_validator_" + formatter.getName(),
 		})
 	}
+
+	if g.config.Marshallers {
+		marshallers := []marshaller{}
+		for _, v := range validators {
+			if m, ok := v.(marshaller); ok {
+				marshallers = append(marshallers, m)
+			}
+		}
+		if len(marshallers) > 0 {
+			g.generateMarshaler(decl, marshallers)
+		}
+	}
+}
+
+func (g *schemaGenerator) generateMarshaler(decl *codegen.TypeDecl, marshallers []marshaller) {
+	if g.config.OnlyModels || !g.config.Marshallers {
+		return
+	}
+
+	if hasMarshallers, ok := g.output.marshallersByTypeDecl[decl]; ok || hasMarshallers {
+		return
+	}
+
+	defer func() {
+		g.output.marshallersByTypeDecl[decl] = true
+	}()
+
+	for _, formatter := range g.formatters {
+		formatter.addImport(g.output.file, decl)
+
+		g.output.file.Package.AddDecl(&codegen.Method{
+			Impl: formatter.generateMarshaler(g.output, decl, marshallers),
+			Name: decl.GetName() + "_marshaller_" + formatter.getName(),
+		})
+	}
 }
 
 func (g *schemaGenerator) generateType(t *schemas.Type, scope nameScope) (codegen.Type, error) {

@@ -113,6 +113,51 @@ func (jf *jsonFormatter) generate(
 	}
 }
 
+func (jf *jsonFormatter) generateMarshaler(
+	output *output,
+	declType *codegen.TypeDecl,
+	marshallers []marshaller,
+) func(*codegen.Emitter) error {
+	return func(out *codegen.Emitter) error {
+		tp := typePlain
+
+		if tp == declType.Name {
+			for i := 0; !output.isUniqueTypeName(tp) && i < math.MaxInt; i++ {
+				tp = fmt.Sprintf("%s_%d", typePlain, i)
+			}
+		}
+
+		out.Printlnf("func (j %s) Marshal%s() ([]byte, error) {", declType.Name, strings.ToUpper(formatJSON))
+		out.Indent(1)
+
+		out.Printlnf("type %s %s", tp, declType.Name)
+		out.Printlnf("return json.Marshal(&struct {")
+		out.Indent(1)
+		out.Printlnf("%s", tp)
+		for _, v := range marshallers {
+			if err := v.generateMarshaler(out, "json", true); err != nil {
+				return fmt.Errorf("cannot generate pre marshaller: %w", err)
+			}
+		}
+		out.Indent(-1)
+		out.Printlnf("}{")
+		out.Indent(1)
+		out.Printlnf("%s: (%s)(%s),", tp, tp, "j")
+		for _, v := range marshallers {
+			if err := v.generateMarshaler(out, "json", false); err != nil {
+				return fmt.Errorf("cannot generate post marshaller: %w", err)
+			}
+		}
+		out.Indent(-1)
+		out.Printlnf("})")
+
+		out.Indent(-1)
+		out.Printlnf("}")
+
+		return nil
+	}
+}
+
 func (jf *jsonFormatter) enumMarshal(declType *codegen.TypeDecl) func(*codegen.Emitter) error {
 	return func(out *codegen.Emitter) error {
 		out.Commentf("Marshal%s implements %s.Marshaler.", strings.ToUpper(formatJSON), formatJSON)

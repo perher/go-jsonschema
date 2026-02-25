@@ -9,6 +9,7 @@ type formatter interface {
 	getName() string
 
 	generate(output *output, declType *codegen.TypeDecl, validators []validator) func(*codegen.Emitter) error
+	generateMarshaler(output *output, declType *codegen.TypeDecl, marshaller []marshaller) func(*codegen.Emitter) error
 	enumMarshal(declType *codegen.TypeDecl) func(*codegen.Emitter) error
 	enumUnmarshal(
 		declType codegen.TypeDecl,

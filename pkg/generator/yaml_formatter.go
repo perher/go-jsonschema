@@ -111,6 +111,16 @@ func (yf *yamlFormatter) generate(
 	}
 }
 
+func (yf *yamlFormatter) generateMarshaler(
+	output *output,
+	declType *codegen.TypeDecl,
+	marshallers []marshaller,
+) func(*codegen.Emitter) error {
+	return func(out *codegen.Emitter) error {
+		return nil
+	}
+}
+
 func (yf *yamlFormatter) enumMarshal(declType *codegen.TypeDecl) func(*codegen.Emitter) error {
 	return func(out *codegen.Emitter) error {
 		out.Commentf("Marshal%s implements %s.Marshal.", strings.ToUpper(formatYAML), formatYAML)

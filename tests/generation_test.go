@@ -279,6 +279,14 @@ func TestSchemaExtensions(t *testing.T) {
 	testExamples(t, basicConfig, "./data/schemaExtensions")
 }
 
+func TestMarshallers(t *testing.T) {
+	t.Parallel()
+
+	cfg := basicConfig
+	cfg.Marshallers = true
+	testExamples(t, cfg, "./data/marshallers")
+}
+
 func TestDeeplyNestedMinimalNames(t *testing.T) {
 	t.Parallel()
 

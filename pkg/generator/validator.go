@@ -28,6 +28,11 @@ type validator interface {
 	desc() *validatorDesc
 }
 
+type marshaller interface {
+	generateMarshaler(out *codegen.Emitter, format string, decl bool) error
+	desc() *validatorDesc
+}
+
 type packageImport struct {
 	qualifiedName string
 }
@@ -521,6 +526,20 @@ func (v *stringValidator) generate(out *codegen.Emitter, format string) error {
 		out.Printlnf(`return fmt.Errorf("field %%s length: must be <= %%d", "%s", %d)`, fieldName, v.maxLength)
 		out.Indent(-1)
 		out.Printlnf("}")
+	}
+
+	return nil
+}
+
+func (v *stringValidator) generateMarshaler(out *codegen.Emitter, format string, decl bool) error {
+	if v.constVal == nil {
+		return nil
+	}
+
+	if decl {
+		out.Printlnf("%s string `%s:\"%s\"`", v.fieldName, format, v.jsonName)
+	} else {
+		out.Printlnf(`%s: "%s",`, v.fieldName, *v.constVal)
 	}
 
 	return nil

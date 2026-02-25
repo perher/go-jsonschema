@@ -220,6 +220,7 @@ func (g *Generator) beginOutput(
 		declsBySchema:           map[*schemas.Type]*codegen.TypeDecl{},
 		declsByName:             map[string]*codegen.TypeDecl{},
 		unmarshallersByTypeDecl: map[*codegen.TypeDecl]bool{},
+		marshallersByTypeDecl:   map[*codegen.TypeDecl]bool{},
 		processedSchemas:        map[string]bool{},
 	}
 	g.outputs[id] = output

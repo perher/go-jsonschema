@@ -24,6 +24,8 @@ type Config struct {
 	Tags []string
 	// OnlyModels configures the generator to omit unmarshal methods, validations, anything but models.
 	OnlyModels bool
+	// Generate custom marshallers (e.g. with const values)
+	Marshallers bool
 	// MinSizedInts configures the generator to use the smallest int and uint types based on schema maximum values.
 	MinSizedInts bool
 	// MinimalNames configures the generator to use the shortest identifier names possible.
