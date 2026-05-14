@@ -938,19 +938,22 @@ func (g *schemaGenerator) addStructField(
 
 func (g *schemaGenerator) generateStructFieldTags(name string, extraTags []string, isRequired bool) string {
 	var (
-		tagsBuilder strings.Builder
-		omitJson    string
-		omitRest    string
+		tagsBuilder      strings.Builder
+		omitJson         string
+		omitMapstructure string
+		omitRest         string
 	)
 
 	if !isRequired {
 		if !g.config.DisableOmitEmpty {
 			omitJson += ",omitempty"
+			omitMapstructure += ",omitempty"
 			omitRest += ",omitempty"
 		}
 
 		if !g.config.DisableOmitZero {
 			omitJson += ",omitzero"
+			omitMapstructure += ",omitzero"
 			// omitRest is not set as omitzero is supported only by the json package
 		}
 	}
@@ -959,6 +962,8 @@ func (g *schemaGenerator) generateStructFieldTags(name string, extraTags []strin
 		switch tag {
 		case "json":
 			fmt.Fprintf(&tagsBuilder, `%s:"%s%s" `, tag, name, omitJson)
+		case "mapstructure":
+			fmt.Fprintf(&tagsBuilder, `%s:"%s%s" `, tag, name, omitMapstructure)
 		default:
 			fmt.Fprintf(&tagsBuilder, `%s:"%s%s" `, tag, name, omitRest)
 		}
@@ -1011,7 +1016,7 @@ func (g *schemaGenerator) generateStructFieldType(
 		return fieldType, nil
 	}
 
-	if g.config.SkipOptionalPointer && len(schemaType.Type) >= 0 && schemas.IsPrimitiveType(schemaType.Type[0]) {
+	if g.config.SkipOptionalPointer && len(schemaType.Type) > 0 && schemas.IsPrimitiveType(schemaType.Type[0]) {
 		return fieldType, nil
 	}
 
